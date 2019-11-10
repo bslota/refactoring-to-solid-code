@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: library-refactoring
+  mail:
+    host: localhost
+    port: 10025
+    protocol: smtp
