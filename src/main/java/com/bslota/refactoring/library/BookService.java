@@ -15,6 +15,12 @@ public class BookService {
     @Autowired
     private NotificationSender emailService;
 
+    public BookService(BookDAO bookDAO, PatronDAO patronDAO, NotificationSender notificationSender) {
+        this.bookDAO = bookDAO;
+        this.patronDAO = patronDAO;
+        this.emailService = notificationSender;
+    }
+
     boolean placeOnHold(int bookId, int patronId, int days) {
         Book book = bookDAO.getBookFromDatabase(bookId);
         Patron patron = patronDAO.getPatronFromDatabase(patronId);
