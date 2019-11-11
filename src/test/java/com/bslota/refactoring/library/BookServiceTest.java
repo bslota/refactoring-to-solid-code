@@ -32,10 +32,10 @@ class BookServiceTest {
         patronThatDoesNotExist();
 
         //when:
-        boolean result = bookService.placeOnHold(NOT_EXISTING_BOOK_ID, NOT_EXISTING_PATRON_ID, HOLDING_PERIOD);
+        boolean bookWasPlacedOnHold = bookService.placeOnHold(NOT_EXISTING_BOOK_ID, NOT_EXISTING_PATRON_ID, HOLDING_PERIOD);
 
         //then
-        assertFalse(result);
+        assertFalse(bookWasPlacedOnHold);
     }
 
     private void patronThatDoesNotExist() {
