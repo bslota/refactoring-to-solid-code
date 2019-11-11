@@ -1,6 +1,7 @@
 package com.bslota.refactoring.library;
 
 import java.time.Instant;
+import java.util.List;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
@@ -11,6 +12,7 @@ public class Patron {
     private int points;
     private String email;
     private boolean qualifiesForFreeBook;
+    private List<Integer> holds;
 
     public int getPatronId() {
         return patronId;
@@ -50,6 +52,7 @@ public class Patron {
             book.setReservationDate(Instant.now());
             book.setReservationEndDate(Instant.now().plus(days, DAYS));
             book.setPatronId(patronId);
+            holds.add(book.getBookId());
         }
     }
 
@@ -59,5 +62,9 @@ public class Patron {
 
     public String getEmail() {
         return this.email;
+    }
+
+    public List<Integer> getHolds() {
+        return this.holds;
     }
 }

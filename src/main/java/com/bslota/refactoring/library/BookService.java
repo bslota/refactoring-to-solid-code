@@ -26,8 +26,10 @@ public class BookService {
         Patron patron = patronDAO.getPatronFromDatabase(patronId);
         boolean flag = false;
         if (book != null && patron != null) {
-            patron.placeOnHold(book, days);
-            flag = true;
+            if (!(patron.getHolds().size() > 5)) {
+                patron.placeOnHold(book, days);
+                flag = true;
+            }
         }
         if (flag) {
             addLoyaltyPoints(patron);
