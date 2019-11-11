@@ -26,7 +26,7 @@ class BookServiceTest {
     );
 
     @Test
-    void shouldFailToPlaceTheBookOnHold() {
+    void shouldFailToPlaceTheBookOnHoldWhenBookAndPatronDoNotExist() {
         //given:
         bookThatDoesNotExist();
         patronThatDoesNotExist();
