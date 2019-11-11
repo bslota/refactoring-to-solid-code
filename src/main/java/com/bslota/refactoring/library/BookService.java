@@ -7,13 +7,13 @@ import org.springframework.stereotype.Service;
 public class BookService {
 
     @Autowired
-    BookDAO bookDAO;
+    private BookDAO bookDAO;
 
     @Autowired
-    PatronDAO patronDAO;
+    private PatronDAO patronDAO;
 
     @Autowired
-    NotificationSender emailService;
+    private NotificationSender emailService;
 
     boolean placeOnHold(int bookId, int patronId, int days) {
         Book book = bookDAO.getBookFromDatabase(bookId);
