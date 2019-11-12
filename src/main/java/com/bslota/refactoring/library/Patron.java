@@ -6,28 +6,23 @@ import java.util.List;
 import static java.time.temporal.ChronoUnit.DAYS;
 
 public class Patron {
-    private int patronId;
-    private String name;
+    private PatronId patronId;
     private int type;
     private int points;
     private String email;
     private boolean qualifiesForFreeBook;
     private List<Integer> holds;
 
-    public int getPatronId() {
-        return patronId;
+    public Patron() {
+
     }
 
-    public void setPatronId(int patronId) {
+    public Patron(PatronId patronId) {
         this.patronId = patronId;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public PatronId getPatronId() {
+        return patronId;
     }
 
     public int getType() {
@@ -51,7 +46,7 @@ public class Patron {
         if (reservationEndDate != null) {
             book.setReservationDate(Instant.now());
             book.setReservationEndDate(Instant.now().plus(days, DAYS));
-            book.setPatronId(patronId);
+            book.setPatronId(patronId.asInt());
             holds.add(book.getBookId());
         }
     }

@@ -108,10 +108,10 @@ class BookServiceTest {
 
     private void thereIsAPatronWith(int specifiedNumberOfHolds) {
         Patron patron = new Patron();
-        patron.setPatronId(MAX_HOLDS_PATRON_ID);
-        patron.setHolds(IntStream.range(0, specifiedNumberOfHolds)
-                .boxed().collect(toList()));
-        when(patronDAOStub.getPatronFromDatabase(patron.getPatronId())).thenReturn(patron);
+//        patron.setPatronId(MAX_HOLDS_PATRON_ID);
+//        patron.setHolds(IntStream.range(0, specifiedNumberOfHolds)
+//                .boxed().collect(toList()));
+//        when(patronDAOStub.getPatronFromDatabase(patron.getPatronId())).thenReturn(patron);
     }
 
     private void patronThatDoesNotExist() {
