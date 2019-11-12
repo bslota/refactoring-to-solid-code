@@ -3,6 +3,10 @@ package com.bslota.refactoring.library;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+
+import static java.time.temporal.ChronoUnit.DAYS;
+
 @Service
 public class BookService {
 
@@ -15,20 +19,22 @@ public class BookService {
     @Autowired
     private NotificationSender emailService;
 
-    public BookService(BookDAO bookDAO, PatronDAO patronDAO, NotificationSender notificationSender) {
-        this.bookDAO = bookDAO;
-        this.patronDAO = patronDAO;
-        this.emailService = notificationSender;
-    }
-
     boolean placeOnHold(int bookId, int patronId, int days) {
         Book book = bookDAO.getBookFromDatabase(bookId);
         Patron patron = patronDAO.getPatronFromDatabase(patronId);
         boolean flag = false;
         if (book != null && patron != null) {
             if (!(patron.getHolds().size() >= 5)) {
-                patron.placeOnHold(book, days);
-                flag = true;
+                Instant reservationDate = book.getReservationDate();
+                if (reservationDate == null) {
+                    patron.getHolds().add(bookId);
+                    book.setReservationDate(Instant.now());
+                    book.setReservationEndDate(Instant.now().plus(days, DAYS));
+                    book.setPatronId(patronId);
+                    bookDAO.update(book);
+                    patronDAO.update(patron);
+                    flag = true;
+                }
             }
         }
         if (flag) {
@@ -70,6 +76,7 @@ public class BookService {
         if (patron.getPoints() > 10000) {
             patron.setQualifiesForFreeBook(true);
         }
+        patronDAO.update(patron);
     }
 
 }

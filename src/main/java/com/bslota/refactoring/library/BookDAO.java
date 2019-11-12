@@ -8,4 +8,8 @@ public class BookDAO {
     public Book getBookFromDatabase(int bookId) {
         throw new DatabaseNotChosenYetException();
     }
+
+    public void update(Book book) {
+        throw new DatabaseNotChosenYetException();
+    }
 }

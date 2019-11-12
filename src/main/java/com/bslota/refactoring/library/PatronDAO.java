@@ -8,4 +8,8 @@ public class PatronDAO {
     public Patron getPatronFromDatabase(int patronId) {
         throw new DatabaseNotChosenYetException();
     }
+
+    public void update(Patron patron) {
+        throw new DatabaseNotChosenYetException();
+    }
 }

@@ -42,8 +42,8 @@ public class Book {
         this.reservationEndDate = date;
     }
 
-    public Instant getReservationEndDate() {
-        return this.reservationEndDate;
+    public Instant getReservationDate() {
+        return this.reservationDate;
     }
 
     public void setPatronId(int patronId) {
