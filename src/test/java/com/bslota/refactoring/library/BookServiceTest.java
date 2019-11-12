@@ -6,6 +6,7 @@ import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -87,6 +88,22 @@ class BookServiceTest {
 
         //then:
         assertFalse(bookWasPlacedOnHold);
+    }
+
+    @Test
+    void shouldPlaceTheBookOnHold() {
+        //given
+        int specifiedNumberOfHolds = 4;
+        thereIsAPatronWith(specifiedNumberOfHolds);
+
+        //and
+        thereIsABook();
+
+        //when:
+        boolean bookWasPlacedOnHold = bookService.placeOnHold(EXISTING_BOOK_ID, MAX_HOLDS_PATRON_ID, HOLDING_PERIOD);
+
+        //then:
+        assertTrue(bookWasPlacedOnHold);
     }
 
     private void thereIsAPatronWith(int specifiedNumberOfHolds) {
