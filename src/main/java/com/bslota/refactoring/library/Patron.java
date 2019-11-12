@@ -67,4 +67,8 @@ public class Patron {
     public List<Integer> getHolds() {
         return this.holds;
     }
+
+    public void setHolds(List<Integer> holds) {
+        this.holds = holds;
+    }
 }

@@ -26,7 +26,7 @@ public class BookService {
         Patron patron = patronDAO.getPatronFromDatabase(patronId);
         boolean flag = false;
         if (book != null && patron != null) {
-            if (!(patron.getHolds().size() > 5)) {
+            if (!(patron.getHolds().size() >= 5)) {
                 patron.placeOnHold(book, days);
                 flag = true;
             }
