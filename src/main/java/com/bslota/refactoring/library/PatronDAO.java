@@ -10,6 +10,5 @@ public class PatronDAO {
     }
 
     public void update(Patron patron) {
-        throw new DatabaseNotChosenYetException();
     }
 }

@@ -1,9 +1,6 @@
 package com.bslota.refactoring.library;
 
-import java.time.Instant;
 import java.util.List;
-
-import static java.time.temporal.ChronoUnit.DAYS;
 
 public class Patron {
     private int patronId;
