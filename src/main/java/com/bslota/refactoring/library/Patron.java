@@ -10,8 +10,28 @@ public class Patron {
     private boolean qualifiesForFreeBook;
     private List<Integer> holds;
 
+    public int getPatronId() {
+        return patronId;
+    }
+
+    public void setPatronId(int patronId) {
+        this.patronId = patronId;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public int getType() {
         return this.type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     public int getPoints() {
@@ -28,10 +48,6 @@ public class Patron {
 
     public boolean isQualifiesForFreeBook() {
         return this.qualifiesForFreeBook;
-    }
-
-    public String getEmail() {
-        return this.email;
     }
 
     public List<Integer> getHolds() {
