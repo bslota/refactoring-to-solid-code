@@ -8,6 +8,13 @@ public class Book {
     private Instant reservationEndDate;
     private int patronId;
 
+    public Book(int bookId, Instant reservationDate, Instant reservationEndDate, int patronId) {
+        this.bookId = bookId;
+        this.reservationDate = reservationDate;
+        this.reservationEndDate = reservationEndDate;
+        this.patronId = patronId;
+    }
+
     public int getBookId() {
         return bookId;
     }

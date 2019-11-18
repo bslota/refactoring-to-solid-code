@@ -58,10 +58,10 @@ public class BookService {
             case 0: // regular patron
                 patron.setPoints(patron.getPoints() + 1);
                 break;
-            case 1:
+            case 1: // researcher
                 patron.setPoints(patron.getPoints() + 5);
                 break;
-            case 2:
+            case 2: //premium
                 int newPoints;
                 if (patron.getPoints() == 0) {
                     newPoints = 100;

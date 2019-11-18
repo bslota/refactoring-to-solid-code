@@ -10,5 +10,6 @@ public class BookDAO {
     }
 
     public void update(Book book) {
+        throw new DatabaseNotChosenYetException();
     }
 }

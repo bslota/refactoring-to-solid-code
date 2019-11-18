@@ -10,6 +10,15 @@ public class Patron {
     private boolean qualifiesForFreeBook;
     private List<Integer> holds;
 
+    public Patron(int patronId, int type, int points, String email, boolean qualifiesForFreeBook, List<Integer> holds) {
+        this.patronId = patronId;
+        this.type = type;
+        this.points = points;
+        this.email = email;
+        this.qualifiesForFreeBook = qualifiesForFreeBook;
+        this.holds = holds;
+    }
+
     public int getPatronId() {
         return patronId;
     }
