@@ -47,7 +47,7 @@ public class BookService {
     private void sendNotificationToEmployeesAboutFreeBookRewardFor(Patron patron) {
         String title = "[REWARD] Patron for free book reward waiting";
         String body = "Dear Colleague, \n" +
-                "One of our patrons with ID " + patron.getPatronId() + " gathered " + patron.getPoints() + ". \n" +
+                "One of our patrons with ID " + patron.getPatronIdValue() + " gathered " + patron.getPoints() + ". \n" +
                 "Please contact him and prepare a free book reward!";
         String employees = "customerservice@your-library.com";
         emailService.sendMail(new String[]{employees}, "contact@your-library.com", title, body);
@@ -57,7 +57,7 @@ public class BookService {
         patron.getHolds().add(book.getBookId());
         book.setReservationDate(Instant.now());
         book.setReservationEndDate(Instant.now().plus(days, DAYS));
-        book.setPatronId(patron.getPatronId());
+        book.setPatronId(patron.getPatronIdValue());
     }
 
     private boolean isAvailable(Book book) {

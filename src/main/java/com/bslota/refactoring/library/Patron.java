@@ -3,13 +3,13 @@ package com.bslota.refactoring.library;
 import java.util.List;
 
 public class Patron {
-    private int patronId;
+    private PatronId patronId;
     private int type;
     private int points;
     private boolean qualifiesForFreeBook;
     private List<Integer> holds;
 
-    public Patron(int patronId, int type, int points, boolean qualifiesForFreeBook, List<Integer> holds) {
+    public Patron(PatronId patronId, int type, int points, boolean qualifiesForFreeBook, List<Integer> holds) {
         this.patronId = patronId;
         this.type = type;
         this.points = points;
@@ -17,12 +17,8 @@ public class Patron {
         this.holds = holds;
     }
 
-    public int getPatronId() {
-        return patronId;
-    }
-
-    public void setPatronId(int patronId) {
-        this.patronId = patronId;
+    public int getPatronIdValue() {
+        return patronId.asInt();
     }
 
     public int getType() {
@@ -55,5 +51,9 @@ public class Patron {
 
     public void setHolds(List<Integer> holds) {
         this.holds = holds;
+    }
+
+    public PatronId getPatronId() {
+        return this.patronId;
     }
 }

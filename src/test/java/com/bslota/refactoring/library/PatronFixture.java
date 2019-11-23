@@ -12,7 +12,7 @@ import static java.util.stream.Collectors.toList;
  */
 class PatronFixture {
 
-    private static final int SOME_PATRON_ID = 10;
+    private static final PatronId SOME_PATRON_ID = PatronId.of(10);
 
     static Patron patronWithoutHolds() {
         return newPatron().build();
@@ -31,7 +31,7 @@ class PatronFixture {
     }
 
     static class PatronBuilder {
-        private int patronId = SOME_PATRON_ID;
+        private PatronId patronId = SOME_PATRON_ID;
         private int type;
         private int points;
         private boolean qualifiesForFreeBook;
@@ -63,6 +63,11 @@ class PatronFixture {
 
         Patron build() {
             return new Patron(patronId, type, points, qualifiesForFreeBook, holds);
+        }
+
+        PatronBuilder withId(PatronId patronId) {
+            this.patronId = patronId;
+            return this;
         }
     }
 }

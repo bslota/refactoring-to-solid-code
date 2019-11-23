@@ -53,7 +53,7 @@ class BookServiceTest {
         Patron patron = patronWithMaxNumberOfHolds();
 
         //when
-        boolean result = bookService.placeOnHold(book.getBookId(), patron.getPatronId(), PERIOD_IN_DAYS);
+        boolean result = bookService.placeOnHold(book.getBookId(), patron.getPatronIdValue(), PERIOD_IN_DAYS);
 
         //then
         assertFalse(result);
@@ -66,7 +66,7 @@ class BookServiceTest {
         Book book = unavailableBook();
 
         //when:
-        boolean result = bookService.placeOnHold(book.getBookId(), patron.getPatronId(), PERIOD_IN_DAYS);
+        boolean result = bookService.placeOnHold(book.getBookId(), patron.getPatronIdValue(), PERIOD_IN_DAYS);
 
         //then
         assertFalse(result);
@@ -79,7 +79,7 @@ class BookServiceTest {
         Patron patron = patronWithoutHolds();
 
         //when
-        boolean result = bookService.placeOnHold(book.getBookId(), patron.getPatronId(), PERIOD_IN_DAYS);
+        boolean result = bookService.placeOnHold(book.getBookId(), patron.getPatronIdValue(), PERIOD_IN_DAYS);
 
         //then
         assertTrue(result);
@@ -92,7 +92,7 @@ class BookServiceTest {
         Patron patron = patronWithoutHolds();
 
         //when
-        bookService.placeOnHold(book.getBookId(), patron.getPatronId(), PERIOD_IN_DAYS);
+        bookService.placeOnHold(book.getBookId(), patron.getPatronIdValue(), PERIOD_IN_DAYS);
 
         //then
         verify(bookDAO, atLeastOnce()).update(any());
@@ -107,7 +107,7 @@ class BookServiceTest {
         Patron patron = patronQualifyingForFreeBook();
 
         //when
-        bookService.placeOnHold(book.getBookId(), patron.getPatronId(), PERIOD_IN_DAYS);
+        bookService.placeOnHold(book.getBookId(), patron.getPatronIdValue(), PERIOD_IN_DAYS);
 
         //then
         verify(notificationSender, atLeastOnce()).sendMail(any(), any(), any(), any());
@@ -115,19 +115,19 @@ class BookServiceTest {
 
     private Patron patronWithoutHolds() {
         Patron patron = PatronFixture.patronWithoutHolds();
-        when(patronDAO.getPatronFromDatabase(patron.getPatronId())).thenReturn(patron);
+        when(patronDAO.getPatronFromDatabase(patron.getPatronIdValue())).thenReturn(patron);
         return patron;
     }
 
     private Patron patronQualifyingForFreeBook() {
         Patron patron = PatronFixture.patronQualifyingForFreeBook();
-        when(patronDAO.getPatronFromDatabase(patron.getPatronId())).thenReturn(patron);
+        when(patronDAO.getPatronFromDatabase(patron.getPatronIdValue())).thenReturn(patron);
         return patron;
     }
 
     private Patron patronWithMaxNumberOfHolds() {
         Patron patron = PatronFixture.patronWithMaxNumberOfHolds();
-        when(patronDAO.getPatronFromDatabase(patron.getPatronId())).thenReturn(patron);
+        when(patronDAO.getPatronFromDatabase(patron.getPatronIdValue())).thenReturn(patron);
         return patron;
     }
 
