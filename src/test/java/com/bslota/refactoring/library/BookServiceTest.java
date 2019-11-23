@@ -81,7 +81,7 @@ class BookServiceTest {
     }
 
     private Patron patronWithoutHolds() {
-        Patron patron = new Patron(ID_OF_PATRON_WITH_MAX_NUMBER_OF_HOLDS, 0, 0, false, new LinkedList<>());
+        Patron patron = new Patron(ID_OF_PATRON_WITH_MAX_NUMBER_OF_HOLDS, 0, 10000, false, new LinkedList<>());
         when(patronDAO.getPatronFromDatabase(patron.getPatronId())).thenReturn(patron);
         return patron;
     }
