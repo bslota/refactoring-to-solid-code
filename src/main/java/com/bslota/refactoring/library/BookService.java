@@ -24,11 +24,11 @@ public class BookService {
             PlaceOnHoldResult result = patron.placeOnHold(book);
             if (result instanceof BookPlacedOnHold) {
                 book.placedOnHold(patron.getPatronId(), days);
+                addLoyaltyPoints(patron.getLoyalties());
                 bookDAO.update(book);
                 patronDAO.update(patron);
-                addLoyaltyPoints(patron, patron.getLoyalties());
                 if (patron.getLoyalties().isQualifiesForFreeBook()) {
-                    sendNotificationToEmployeesAboutFreeBookRewardFor(patron);
+                    sendNotificationToEmployeesAboutFreeBookRewardFor(patron.getLoyalties());
                 }
                 return true;
             }
@@ -36,10 +36,10 @@ public class BookService {
         return false;
     }
 
-    private void sendNotificationToEmployeesAboutFreeBookRewardFor(Patron patron) {
+    private void sendNotificationToEmployeesAboutFreeBookRewardFor(PatronLoyalties loyalties) {
         String title = "[REWARD] Patron for free book reward waiting";
         String body = "Dear Colleague, \n" +
-                "One of our patrons with ID " + patron.getPatronIdValue() + " gathered " + patron.getLoyalties().getPoints() + ". \n" +
+                "One of our patrons with ID " + loyalties.getPatronId().asInt() + " gathered " + loyalties.getPoints() + ". \n" +
                 "Please contact him and prepare a free book reward!";
         String employees = "customerservice@your-library.com";
         emailService.sendMail(new String[]{employees}, "contact@your-library.com", title, body);
@@ -53,7 +53,7 @@ public class BookService {
         return book != null;
     }
 
-    private void addLoyaltyPoints(Patron patron, PatronLoyalties loyalties) {
+    private void addLoyaltyPoints(PatronLoyalties loyalties) {
         int type = loyalties.getType();
         switch (type) {
             case 0: // regular patron
@@ -77,7 +77,6 @@ public class BookService {
         if (loyalties.getPoints() > 10000) {
             loyalties.setQualifiesForFreeBook(true);
         }
-        patronDAO.update(patron);
     }
 
 }

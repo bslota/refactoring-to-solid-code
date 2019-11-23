@@ -9,7 +9,7 @@ public class Patron {
 
     public Patron(PatronId patronId, int type, int points, boolean qualifiesForFreeBook, List<Integer> holds) {
         this.patronId = patronId;
-        this.loyalties = new PatronLoyalties(type, points, qualifiesForFreeBook);
+        this.loyalties = new PatronLoyalties(patronId, type, points, qualifiesForFreeBook);
         this.holds = holds;
     }
 
