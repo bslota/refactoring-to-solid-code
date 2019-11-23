@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.bslota.refactoring.library.BookFixture.availableBook;
 import static com.bslota.refactoring.library.PatronFixture.PatronBuilder.newPatron;
+import static com.bslota.refactoring.library.PatronFixture.patronWithMaxNumberOfHolds;
 import static com.bslota.refactoring.library.PatronFixture.patronWithoutHolds;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -41,4 +42,33 @@ class PatronTest {
         assertEquals(1, patron.getHolds().size());
     }
 
+    @Test
+    void shouldReturnSuccessWhenBookIsPlacedOnHold() {
+        //given
+        BookId bookId = BookId.of(BOOK_ID_VALUE);
+        Patron patron = patronWithoutHolds();
+
+        //when
+        PlaceOnHoldResult result = patron.placeOnHold(bookId);
+
+        //then
+        assertTrue(result instanceof BookPlacedOnHold);
+        assertEquals(patron.getPatronId(), result.patronId());
+        assertEquals(bookId, result.bookId());
+    }
+
+    @Test
+    void shouldReturnFailureWhenPatronHasReachedMaxNumberOfHolds() {
+        //given
+        BookId bookId = BookId.of(BOOK_ID_VALUE);
+        Patron patron = patronWithMaxNumberOfHolds();
+
+        //when
+        PlaceOnHoldResult result = patron.placeOnHold(bookId);
+
+        //then
+        assertTrue(result instanceof PlacingOnHoldFailed);
+        assertEquals(patron.getPatronId(), result.patronId());
+        assertEquals(bookId, result.bookId());
+    }
 }

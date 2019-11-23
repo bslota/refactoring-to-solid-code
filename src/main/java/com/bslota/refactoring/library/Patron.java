@@ -17,8 +17,13 @@ public class Patron {
         this.holds = holds;
     }
 
-    void placeOnHold(Book book) {
-        this.holds.add(book.getBookIdValue());
+    PlaceOnHoldResult placeOnHold(BookId bookId) {
+        if (hasNotReachedMaximumNumberOfHolds()) {
+            this.holds.add(bookId.asInt());
+            return BookPlacedOnHold.of(bookId, this.patronId);
+        } else {
+            return PlacingOnHoldFailed.of(bookId, this.patronId);
+        }
     }
 
     public int getPatronIdValue() {
@@ -59,5 +64,9 @@ public class Patron {
 
     public PatronId getPatronId() {
         return this.patronId;
+    }
+
+    boolean hasNotReachedMaximumNumberOfHolds() {
+        return this.holds.size() < 5;
     }
 }

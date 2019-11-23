@@ -9,7 +9,7 @@ public class BookService {
 
     private final PatronDAO patronDAO;
 
-    private final  NotificationSender emailService;
+    private final NotificationSender emailService;
 
     public BookService(BookDAO bookDAO, PatronDAO patronDAO, NotificationSender emailService) {
         this.bookDAO = bookDAO;
@@ -22,9 +22,10 @@ public class BookService {
         Patron patron = patronDAO.getPatronFromDatabase(patronId);
         boolean flag = false;
         if (thereIsA(book) && thereIsA(patron)) {
-            if (maximumNumberOfHoldsNotReachedBy(patron)) {
-                if (book.isAvailable()) {
-                    placeOnHold(book, patron, days);
+            if (book.isAvailable()) {
+                if (patron.hasNotReachedMaximumNumberOfHolds()) {
+                    patron.placeOnHold(book.getBookId());
+                    book.placedOnHold(patron.getPatronId(), days);
                     bookDAO.update(book);
                     patronDAO.update(patron);
                     flag = true;
@@ -47,15 +48,6 @@ public class BookService {
                 "Please contact him and prepare a free book reward!";
         String employees = "customerservice@your-library.com";
         emailService.sendMail(new String[]{employees}, "contact@your-library.com", title, body);
-    }
-
-    private void placeOnHold(Book book, Patron patron, int days) {
-        patron.placeOnHold(book);
-        book.placedOnHold(patron.getPatronId(), days);
-    }
-
-    private boolean maximumNumberOfHoldsNotReachedBy(Patron patron) {
-        return !(patron.getHolds().size() >= 5);
     }
 
     private boolean thereIsA(Patron patron) {
