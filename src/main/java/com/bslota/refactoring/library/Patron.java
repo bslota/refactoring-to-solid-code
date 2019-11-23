@@ -17,6 +17,10 @@ public class Patron {
         this.holds = holds;
     }
 
+    void placeOnHold(BookId bookId) {
+        this.holds.add(bookId.asInt());
+    }
+
     public int getPatronIdValue() {
         return patronId.asInt();
     }
