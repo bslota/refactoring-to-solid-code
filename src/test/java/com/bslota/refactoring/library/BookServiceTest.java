@@ -11,7 +11,11 @@ import static java.time.temporal.ChronoUnit.DAYS;
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
@@ -39,6 +43,17 @@ class BookServiceTest {
 
         //then
         assertFalse(false);
+    }
+
+    @Test
+    void shouldNotSAveBookPatronOrSendNotificationFailToPlaceNotExistingBookOnHold() {
+        //when
+        bookService.placeOnHold(ID_OF_NOT_EXISTING_BOOK, ID_OF_NOT_EXISTING_PATRON, PERIOD_IN_DAYS);
+
+        //then
+        verify(bookDAO, never()).update(any());
+        verify(patronDAO, never()).update(any());
+        verify(notificationSender, never()).sendMail(any(), any(), any(), any());
     }
 
     @Test
@@ -78,6 +93,21 @@ class BookServiceTest {
 
         //then
         assertTrue(result);
+    }
+
+    @Test
+    void shouldSaveBookPatronAndSendNotificationSucceedToPlaceBookOnHold() {
+        //given
+        Book book = availableBook();
+        Patron patron = patronWithoutHolds();
+
+        //when
+        bookService.placeOnHold(book.getBookId(), patron.getPatronId(), PERIOD_IN_DAYS);
+
+        //then
+        verify(bookDAO, atLeastOnce()).update(any());
+        verify(patronDAO, atLeastOnce()).update(any());
+        verify(notificationSender, atLeastOnce()).sendMail(any(), any(), any(), any());
     }
 
     private Patron patronWithoutHolds() {
