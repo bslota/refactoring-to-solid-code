@@ -20,29 +20,26 @@ public class BookService {
     boolean placeOnHold(int bookId, int patronId, int days) {
         Book book = bookDAO.getBookFromDatabase(bookId);
         Patron patron = patronDAO.getPatronFromDatabase(patronId);
-        boolean flag = false;
         if (thereIsA(book) && thereIsA(patron)) {
             PlaceOnHoldResult result = patron.placeOnHold(book);
             if (result instanceof BookPlacedOnHold) {
                 book.placedOnHold(patron.getPatronId(), days);
                 bookDAO.update(book);
                 patronDAO.update(patron);
-                flag = true;
+                addLoyaltyPoints(patron, patron.getLoyalties());
+                if (patron.getLoyalties().isQualifiesForFreeBook()) {
+                    sendNotificationToEmployeesAboutFreeBookRewardFor(patron);
+                }
+                return true;
             }
         }
-        if (flag) {
-            addLoyaltyPoints(patron);
-        }
-        if (flag && patron.isQualifiesForFreeBook()) {
-            sendNotificationToEmployeesAboutFreeBookRewardFor(patron);
-        }
-        return flag;
+        return false;
     }
 
     private void sendNotificationToEmployeesAboutFreeBookRewardFor(Patron patron) {
         String title = "[REWARD] Patron for free book reward waiting";
         String body = "Dear Colleague, \n" +
-                "One of our patrons with ID " + patron.getPatronIdValue() + " gathered " + patron.getPoints() + ". \n" +
+                "One of our patrons with ID " + patron.getPatronIdValue() + " gathered " + patron.getLoyalties().getPoints() + ". \n" +
                 "Please contact him and prepare a free book reward!";
         String employees = "customerservice@your-library.com";
         emailService.sendMail(new String[]{employees}, "contact@your-library.com", title, body);
@@ -56,29 +53,29 @@ public class BookService {
         return book != null;
     }
 
-    private void addLoyaltyPoints(Patron patron) {
-        int type = patron.getType();
+    private void addLoyaltyPoints(Patron patron, PatronLoyalties loyalties) {
+        int type = loyalties.getType();
         switch (type) {
             case 0: // regular patron
-                patron.setPoints(patron.getPoints() + 1);
+                loyalties.setPoints(loyalties.getPoints() + 1);
                 break;
             case 1: // researcher
-                patron.setPoints(patron.getPoints() + 5);
+                loyalties.setPoints(loyalties.getPoints() + 5);
                 break;
             case 2: //premium
                 int newPoints;
-                if (patron.getPoints() == 0) {
+                if (loyalties.getPoints() == 0) {
                     newPoints = 100;
                 } else {
-                    newPoints = patron.getPoints() * 2;
+                    newPoints = loyalties.getPoints() * 2;
                 }
-                patron.setPoints(newPoints);
+                loyalties.setPoints(newPoints);
                 break;
             default:
                 break;
         }
-        if (patron.getPoints() > 10000) {
-            patron.setQualifiesForFreeBook(true);
+        if (loyalties.getPoints() > 10000) {
+            loyalties.setQualifiesForFreeBook(true);
         }
         patronDAO.update(patron);
     }
