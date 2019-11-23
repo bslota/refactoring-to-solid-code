@@ -5,28 +5,28 @@ import org.springframework.stereotype.Service;
 @Service
 public class BookService {
 
-    private final BookDAO bookDAO;
+    private final BookRepository bookRepository;
 
-    private final PatronDAO patronDAO;
+    private final PatronRepository patronRepository;
 
     private final NotificationSender emailService;
 
-    public BookService(BookDAO bookDAO, PatronDAO patronDAO, NotificationSender emailService) {
-        this.bookDAO = bookDAO;
-        this.patronDAO = patronDAO;
+    public BookService(BookRepository bookRepository, PatronRepository patronRepository, NotificationSender emailService) {
+        this.bookRepository = bookRepository;
+        this.patronRepository = patronRepository;
         this.emailService = emailService;
     }
 
     boolean placeOnHold(int bookId, int patronId, int days) {
-        Book book = bookDAO.getBookFromDatabase(bookId);
-        Patron patron = patronDAO.getPatronFromDatabase(patronId);
+        Book book = bookRepository.findBy(BookId.of(bookId));
+        Patron patron = patronRepository.findBy(PatronId.of(patronId));
         if (thereIsA(book) && thereIsA(patron)) {
             PlaceOnHoldResult result = patron.placeOnHold(book);
             if (result instanceof BookPlacedOnHold) {
                 book.placedOnHold(patron.getPatronId(), days);
                 addLoyaltyPoints(patron.getLoyalties());
-                bookDAO.update(book);
-                patronDAO.update(patron);
+                bookRepository.save(book);
+                addLoyaltyPoints(patron, patron.getLoyalties());
                 if (patron.getLoyalties().isQualifiesForFreeBook()) {
                     sendNotificationToEmployeesAboutFreeBookRewardFor(patron.getLoyalties());
                 }
