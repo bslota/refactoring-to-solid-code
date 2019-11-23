@@ -24,7 +24,7 @@ public class BookService {
         if (thereIsA(book) && thereIsA(patron)) {
             if (book.isAvailable()) {
                 if (patron.hasNotReachedMaximumNumberOfHolds()) {
-                    patron.placeOnHold(book.getBookId());
+                    patron.placeOnHold(book);
                     book.placedOnHold(patron.getPatronId(), days);
                     bookDAO.update(book);
                     patronDAO.update(patron);

@@ -14,7 +14,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class PatronTest {
 
     private static final int PATRON_ID_VALUE = 10;
-    private static final int BOOK_ID_VALUE = 1;
 
     @Test
     void shouldCreateWithGivenId() {
@@ -45,30 +44,30 @@ class PatronTest {
     @Test
     void shouldReturnSuccessWhenBookIsPlacedOnHold() {
         //given
-        BookId bookId = BookId.of(BOOK_ID_VALUE);
+        Book book = availableBook();
         Patron patron = patronWithoutHolds();
 
         //when
-        PlaceOnHoldResult result = patron.placeOnHold(bookId);
+        PlaceOnHoldResult result = patron.placeOnHold(book);
 
         //then
         assertTrue(result instanceof BookPlacedOnHold);
         assertEquals(patron.getPatronId(), result.patronId());
-        assertEquals(bookId, result.bookId());
+        assertEquals(book.getBookId(), result.bookId());
     }
 
     @Test
     void shouldReturnFailureWhenPatronHasReachedMaxNumberOfHolds() {
         //given
-        BookId bookId = BookId.of(BOOK_ID_VALUE);
+        Book book = availableBook();
         Patron patron = patronWithMaxNumberOfHolds();
 
         //when
-        PlaceOnHoldResult result = patron.placeOnHold(bookId);
+        PlaceOnHoldResult result = patron.placeOnHold(book);
 
         //then
         assertTrue(result instanceof PlacingOnHoldFailed);
         assertEquals(patron.getPatronId(), result.patronId());
-        assertEquals(bookId, result.bookId());
+        assertEquals(book.getBookId(), result.bookId());
     }
 }

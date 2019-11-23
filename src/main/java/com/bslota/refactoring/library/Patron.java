@@ -17,12 +17,12 @@ public class Patron {
         this.holds = holds;
     }
 
-    PlaceOnHoldResult placeOnHold(BookId bookId) {
+    PlaceOnHoldResult placeOnHold(Book book) {
         if (hasNotReachedMaximumNumberOfHolds()) {
-            this.holds.add(bookId.asInt());
-            return BookPlacedOnHold.of(bookId, this.patronId);
+            this.holds.add(book.getBookIdValue());
+            return BookPlacedOnHold.of(book.getBookId(), this.patronId);
         } else {
-            return PlacingOnHoldFailed.of(bookId, this.patronId);
+            return PlacingOnHoldFailed.of(book.getBookId(), this.patronId);
         }
     }
 
