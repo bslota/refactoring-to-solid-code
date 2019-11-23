@@ -1,6 +1,5 @@
 package com.bslota.refactoring.library;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -10,14 +9,17 @@ import static java.time.temporal.ChronoUnit.DAYS;
 @Service
 public class BookService {
 
-    @Autowired
-    private BookDAO bookDAO;
+    private final BookDAO bookDAO;
 
-    @Autowired
-    private PatronDAO patronDAO;
+    private final PatronDAO patronDAO;
 
-    @Autowired
-    private NotificationSender emailService;
+    private final  NotificationSender emailService;
+
+    public BookService(BookDAO bookDAO, PatronDAO patronDAO, NotificationSender emailService) {
+        this.bookDAO = bookDAO;
+        this.patronDAO = patronDAO;
+        this.emailService = emailService;
+    }
 
     boolean placeOnHold(int bookId, int patronId, int days) {
         Book book = bookDAO.getBookFromDatabase(bookId);
