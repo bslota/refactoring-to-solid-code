@@ -18,7 +18,7 @@ public class Patron {
     }
 
     PlaceOnHoldResult placeOnHold(Book book) {
-        if (hasNotReachedMaximumNumberOfHolds()) {
+        if (hasNotReachedMaximumNumberOfHolds() && book.isAvailable()) {
             this.holds.add(book.getBookIdValue());
             return BookPlacedOnHold.of(book.getBookId(), this.patronId);
         } else {
@@ -58,15 +58,11 @@ public class Patron {
         return this.holds;
     }
 
-    public void setHolds(List<Integer> holds) {
-        this.holds = holds;
-    }
-
     public PatronId getPatronId() {
         return this.patronId;
     }
 
-    boolean hasNotReachedMaximumNumberOfHolds() {
+    private boolean hasNotReachedMaximumNumberOfHolds() {
         return this.holds.size() < 5;
     }
 }
