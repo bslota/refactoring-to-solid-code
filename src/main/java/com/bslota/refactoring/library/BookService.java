@@ -2,10 +2,6 @@ package com.bslota.refactoring.library;
 
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-
-import static java.time.temporal.ChronoUnit.DAYS;
-
 @Service
 public class BookService {
 
@@ -27,7 +23,7 @@ public class BookService {
         boolean flag = false;
         if (thereIsA(book) && thereIsA(patron)) {
             if (maximumNumberOfHoldsNotReachedBy(patron)) {
-                if (isAvailable(book)) {
+                if (book.isAvailable()) {
                     placeOnHold(book, patron, days);
                     bookDAO.update(book);
                     patronDAO.update(patron);
@@ -55,13 +51,7 @@ public class BookService {
 
     private void placeOnHold(Book book, Patron patron, int days) {
         patron.placeOnHold(book);
-        book.setReservationDate(Instant.now());
-        book.setReservationEndDate(Instant.now().plus(days, DAYS));
-        book.setPatronId(patron.getPatronIdValue());
-    }
-
-    private boolean isAvailable(Book book) {
-        return book.getReservationDate() == null;
+        book.placedOnHold(patron.getPatronId(), days);
     }
 
     private boolean maximumNumberOfHoldsNotReachedBy(Patron patron) {
