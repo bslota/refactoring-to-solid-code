@@ -41,13 +41,12 @@ public class BookService {
             addLoyaltyPoints(patron);
         }
         if (flag && patron.isQualifiesForFreeBook()) {
-            String title = "[REWARD] Free book waiting for you!";
-            String body = "Dear Sir/Madame, \n" +
-                    "we are pleased to inform you, that the number of loyalty points you have gathered " +
-                    "is " + patron.getPoints() + ". \n" +
-                    "It means we have a reward for you! A free book is waiting at your local library branch!";
-            String email = patron.getEmail();
-            emailService.sendMail(new String[]{email}, "contact@your-library.com", title, body);
+            String title = "[REWARD] Patron for free book reward waiting";
+            String body = "Dear Colleague, \n" +
+                    "One of our patrons with ID " + patron.getPatronId() + " gathered " + patron.getPoints() + ". \n" +
+                    "Please contact him and prepare a free book reward!";
+            String employees = "customerservice@your-library.com";
+            emailService.sendMail(new String[]{employees}, "contact@your-library.com", title, body);
         }
         return flag;
     }

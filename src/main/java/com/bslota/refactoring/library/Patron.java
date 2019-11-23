@@ -6,15 +6,13 @@ public class Patron {
     private int patronId;
     private int type;
     private int points;
-    private String email;
     private boolean qualifiesForFreeBook;
     private List<Integer> holds;
 
-    public Patron(int patronId, int type, int points, String email, boolean qualifiesForFreeBook, List<Integer> holds) {
+    public Patron(int patronId, int type, int points, boolean qualifiesForFreeBook, List<Integer> holds) {
         this.patronId = patronId;
         this.type = type;
         this.points = points;
-        this.email = email;
         this.qualifiesForFreeBook = qualifiesForFreeBook;
         this.holds = holds;
     }
@@ -25,14 +23,6 @@ public class Patron {
 
     public void setPatronId(int patronId) {
         this.patronId = patronId;
-    }
-
-    public String getEmail() {
-        return this.email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public int getType() {
