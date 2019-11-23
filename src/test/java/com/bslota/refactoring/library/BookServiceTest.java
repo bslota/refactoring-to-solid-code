@@ -20,11 +20,11 @@ class BookServiceTest {
     private static final int ID_OF_NOT_EXISTING_PATRON = 10;
     private static final int PERIOD_IN_DAYS = 100;
 
-    private BookDAO bookDAO = mock(BookDAO.class);
-    private PatronDAO patronDAO = mock(PatronDAO.class);
+    private BookRepository bookRepository = mock(BookRepository.class);
+    private PatronRepository patronRepository = mock(PatronRepository.class);
     private NotificationSender notificationSender = mock(NotificationSender.class);
 
-    private BookService bookService = new BookService(bookDAO, patronDAO, notificationSender);
+    private BookService bookService = new BookService(bookRepository, patronRepository, notificationSender);
 
     @Test
     void shouldFailToPlaceNotExistingBookOnHold() {
@@ -32,7 +32,7 @@ class BookServiceTest {
         boolean result = bookService.placeOnHold(ID_OF_NOT_EXISTING_BOOK, ID_OF_NOT_EXISTING_PATRON, PERIOD_IN_DAYS);
 
         //then
-        assertFalse(false);
+        assertFalse(result);
     }
 
     @Test
@@ -41,8 +41,8 @@ class BookServiceTest {
         bookService.placeOnHold(ID_OF_NOT_EXISTING_BOOK, ID_OF_NOT_EXISTING_PATRON, PERIOD_IN_DAYS);
 
         //then
-        verify(bookDAO, never()).update(any());
-        verify(patronDAO, never()).update(any());
+        verify(bookRepository, never()).save(any());
+        verify(patronRepository, never()).save(any());
         verify(notificationSender, never()).sendMail(any(), any(), any(), any());
     }
 
@@ -95,8 +95,8 @@ class BookServiceTest {
         bookService.placeOnHold(book.getBookIdValue(), patron.getPatronIdValue(), PERIOD_IN_DAYS);
 
         //then
-        verify(bookDAO, atLeastOnce()).update(any());
-        verify(patronDAO, atLeastOnce()).update(any());
+        verify(bookRepository, atLeastOnce()).save(any());
+        verify(patronRepository, atLeastOnce()).save(any());
         verify(notificationSender, never()).sendMail(any(), any(), any(), any());
     }
 
@@ -115,31 +115,31 @@ class BookServiceTest {
 
     private Patron patronWithoutHolds() {
         Patron patron = PatronFixture.patronWithoutHolds();
-        when(patronDAO.getPatronFromDatabase(patron.getPatronIdValue())).thenReturn(patron);
+        when(patronRepository.findBy(patron.getPatronId())).thenReturn(patron);
         return patron;
     }
 
     private Patron patronQualifyingForFreeBook() {
         Patron patron = PatronFixture.patronQualifyingForFreeBook();
-        when(patronDAO.getPatronFromDatabase(patron.getPatronIdValue())).thenReturn(patron);
+        when(patronRepository.findBy(patron.getPatronId())).thenReturn(patron);
         return patron;
     }
 
     private Patron patronWithMaxNumberOfHolds() {
         Patron patron = PatronFixture.patronWithMaxNumberOfHolds();
-        when(patronDAO.getPatronFromDatabase(patron.getPatronIdValue())).thenReturn(patron);
+        when(patronRepository.findBy(patron.getPatronId())).thenReturn(patron);
         return patron;
     }
 
     private Book availableBook() {
         Book book = BookFixture.availableBook();
-        when(bookDAO.getBookFromDatabase(book.getBookIdValue())).thenReturn(book);
+        when(bookRepository.findBy(book.getBookId())).thenReturn(book);
         return book;
     }
 
     private Book unavailableBook() {
         Book book = BookFixture.unavailableBook();
-        when(bookDAO.getBookFromDatabase(book.getBookIdValue())).thenReturn(book);
+        when(bookRepository.findBy(book.getBookId())).thenReturn(book);
         return book;
     }
 

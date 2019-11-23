@@ -26,7 +26,8 @@ public class BookService {
                 book.placedOnHold(patron.getPatronId(), days);
                 addLoyaltyPoints(patron.getLoyalties());
                 bookRepository.save(book);
-                addLoyaltyPoints(patron, patron.getLoyalties());
+                patronRepository.save(patron);
+                addLoyaltyPoints(patron.getLoyalties());
                 if (patron.getLoyalties().isQualifiesForFreeBook()) {
                     sendNotificationToEmployeesAboutFreeBookRewardFor(patron.getLoyalties());
                 }
