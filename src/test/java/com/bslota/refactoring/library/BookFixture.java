@@ -26,13 +26,18 @@ class BookFixture {
     }
 
     static class BookBuilder {
-        private int bookId = EXISTING_BOOK_ID;
+        private BookId bookId = BookId.of(EXISTING_BOOK_ID);
         private Instant reservationDate;
         private Instant reservationEndDate;
         private int patronId;
 
         static BookBuilder newBook() {
             return new BookBuilder();
+        }
+
+        BookBuilder withId(BookId bookId) {
+            this.bookId = bookId;
+            return this;
         }
 
         BookBuilder withReservationDate(Instant reservationDate) {
